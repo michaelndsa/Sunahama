@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 
@@ -9,16 +9,18 @@ public class MazeGenerator_Tilemap : MonoBehaviour
     public Tilemap tilemap;
     public Tile wallTile;
     public Tile floorTile;
-
+    public Tile exitTile;
+    public bool IsMazeReady() => maze != null;
     private int[,] maze;
 
     void Start()
     {
         GenerateMaze();
         DrawMaze();
-        CenterTilemap();
+        GenerateExit();
+        GetMaze();
+        //CenterTilemap();
     }
-
     void GenerateMaze()
     {
         if (width % 2 == 0)
@@ -33,6 +35,10 @@ public class MazeGenerator_Tilemap : MonoBehaviour
                 maze[x, y] = 1;
 
         Carve(1, 1);
+    }
+    public int[,] GetMaze()
+    {
+        return maze;
     }
 
     void Carve(int x, int y)
@@ -57,6 +63,60 @@ public class MazeGenerator_Tilemap : MonoBehaviour
                 maze[x + dir.x / 2, y + dir.y / 2] = 0;
                 Carve(nx, ny);
             }
+        }
+    }
+
+    void GenerateExit()
+    {
+        List<Vector2Int> candidates = new List<Vector2Int>();
+
+        // 上下邊界
+        for (int x = 1; x < width - 1; x += 2)
+        {
+            if (maze[x, 1] == 0)
+            {
+                candidates.Add(new Vector2Int(x, 0)); // 下邊
+            }
+            if (maze[x, height - 2] == 0)
+            {
+                candidates.Add(new Vector2Int(x, height - 1)); // 上邊
+            }
+        }
+
+        // 左右邊界
+        for (int y = 1; y < height - 1; y += 2)
+        {
+            if (maze[1, y] == 0)
+            {
+                candidates.Add(new Vector2Int(0, y)); // 左邊
+            }
+            if (maze[width - 2, y] == 0)
+            {
+                candidates.Add(new Vector2Int(width - 1, y)); // 右邊
+            }
+        }
+
+        if (candidates.Count == 0)
+        {
+            Debug.LogWarning("出口候補が見つかりませんでした");
+            return;
+        }
+
+        // 隨機選一個候選點
+        int index = Random.Range(0, candidates.Count);
+        Vector2Int exitPos = candidates[index];
+
+        maze[exitPos.x, exitPos.y] = 0;
+
+        Vector3Int pos = new Vector3Int(exitPos.x, exitPos.y, 0);
+
+        if (exitTile != null)
+        {
+            tilemap.SetTile(pos, exitTile);
+        }
+        else
+        {
+            tilemap.SetTile(pos, floorTile);
         }
     }
 

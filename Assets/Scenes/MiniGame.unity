@@ -202,7 +202,7 @@ Camera:
   m_GameObject: {fileID: 957508811}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -228,7 +228,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 11
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -379,6 +379,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 534219284}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1564442743
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1564442745}
+  - component: {fileID: 1564442744}
+  m_Layer: 0
+  m_Name: Mendamagenarator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1564442744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564442743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82fa6855a994d254296ab49d94c1e043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menDamaPrefeb: {fileID: 8792488699671788768, guid: 18b0b9a2ad0e5cf4f9b9811e55515bfa, type: 3}
+  spawnCount: 1
+  MazeGenerator: {fileID: 1661509451}
+--- !u!4 &1564442745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564442743}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.759726, y: 10.427316, z: -0.013328506}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1661509450
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,6 +460,7 @@ MonoBehaviour:
   tilemap: {fileID: 1273275040}
   wallTile: {fileID: 11400000, guid: 83494efed4eda114dbc80b054da00f3d, type: 2}
   floorTile: {fileID: 11400000, guid: f0b2c8824e2f39742a7325726236f99d, type: 2}
+  exitTile: {fileID: 0}
 --- !u!4 &1661509452
 Transform:
   m_ObjectHideFlags: 0
@@ -435,3 +483,4 @@ SceneRoots:
   - {fileID: 957508814}
   - {fileID: 534219284}
   - {fileID: 1661509452}
+  - {fileID: 1564442745}
