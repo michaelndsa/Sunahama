@@ -1,42 +1,104 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;    // 若用 CanvasGroup 可改用 UnityEngine.CanvasGroup
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class ScreenFadeController : MonoBehaviour
+public class SceneFadeController : MonoBehaviour
 {
-    [Header("淡入/淡出目標")]
-    public Image whiteFade;          // 若用 CanvasGroup 請宣告 CanvasGroup
-    [Header("秒數")]
-    public float fadeDuration = 0.6f;
+    public static SceneFadeController Instance { get; private set; }
 
-    Coroutine currentCo;
+    public Image FadeImage;
+    [SerializeField] float fadeSpeed = 1f;
+    
+    enum FadeState { None, FadingIn, FadingOut, WaitToLoad }
+    private FadeState currentState = FadeState.None;
+    private string nextScene = "";
 
-    /// 呼叫：淡到純白
-    public void FadeInWhite()
+    private void Awake()
     {
-        if (currentCo != null) StopCoroutine(currentCo);
-        currentCo = StartCoroutine(FadeRoutine(0, 1));
-    }
-
-    /// 呼叫：從白淡回透明
-    public void FadeOutWhite()
-    {
-        if (currentCo != null) StopCoroutine(currentCo);
-        currentCo = StartCoroutine(FadeRoutine(1, 0));
-    }
-
-    IEnumerator FadeRoutine(float from, float to)
-    {
-        float t = 0;
-        Color c = whiteFade.color;
-        while (t < 1)
+        if (Instance != null && Instance != this)
         {
-            t += Time.deltaTime / fadeDuration;
-            c.a = Mathf.Lerp(from, to, t);
-            whiteFade.color = c;
-            yield return null;
+            Destroy(gameObject);
+            return;
         }
-        // 當 alpha 歸 0 時可選擇關閉 Canvas 省 Draw Call
-        if (to == 0) whiteFade.gameObject.SetActive(false);
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        if (FadeImage == null)
+            FadeImage = GetComponentInChildren<Image>();
+       
     }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 切場景後直接淡入
+        currentState = FadeState.FadingIn;
+        SetAlpha(1f);
+    }
+
+    private void Start()
+    {
+        SetAlpha(0f); // 初始透明
+        currentState = FadeState.None;
+    }
+
+    private void Update()
+    {
+        switch (currentState)
+        {
+            case FadeState.FadingIn:
+                FadeIn();
+                break;
+            case FadeState.FadingOut:
+                FadeOut();
+                break;
+            case FadeState.WaitToLoad:
+                SceneManager.LoadScene(nextScene);
+                currentState = FadeState.None;
+                break;
+        }
+    }
+
+    // UI 或程式呼叫，開始淡出並切換場景
+    public void StartFade(string sceneName)
+    {
+        nextScene = sceneName;
+        currentState = FadeState.FadingOut;
+    }
+
+    void FadeIn()
+    {
+        Color c = FadeImage.color;
+        c.a -= fadeSpeed * Time.deltaTime;
+        if (c.a <= 0)
+        {
+            c.a = 0;
+            currentState = FadeState.None;
+        }
+        FadeImage.color = c;
+    }
+
+    void FadeOut()
+    {
+        Color c = FadeImage.color;
+        c.a += fadeSpeed * Time.deltaTime;
+        if (c.a >= 1)
+        {
+            c.a = 1;
+            currentState = FadeState.WaitToLoad;
+        }
+        FadeImage.color = c;
+    }
+
+    void SetAlpha(float value)
+    {
+        Color c = FadeImage.color;
+        c.a = value;
+        FadeImage.color = c;
+    }
+
 }

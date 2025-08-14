@@ -17,6 +17,7 @@ public class MendamaSpawner : MonoBehaviour
             yield return null;
         maze = MazeGenerator.GetMaze();
         SpawnMendamas();
+        Debug.Log("Maze size: " + maze.GetLength(0) + " x " + maze.GetLength(1));
     }
 
     void SpawnMendamas()

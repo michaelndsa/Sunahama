@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 public class MazeGenerator_Tilemap : MonoBehaviour
 {
-    public int width = 21;
-    public int height = 21;
-    public Tilemap tilemap;
-    public Tile wallTile;
-    public Tile floorTile;
-    public Tile exitTile;
+    public int Width = 21;
+    public int Height = 21;
+    public Tilemap Tilemap;
+    public Tile WallTile;
+    public Tile FloorTile;
+    public Tile ExitTile;
     public bool IsMazeReady() => maze != null;
     private int[,] maze;
 
@@ -23,15 +23,15 @@ public class MazeGenerator_Tilemap : MonoBehaviour
     }
     void GenerateMaze()
     {
-        if (width % 2 == 0)
-            width += 1;
-        if (height % 2 == 0)
-            height += 1;
+        if (Width % 2 == 0)
+            Width += 1;
+        if (Height % 2 == 0)
+            Height += 1;
 
-        maze = new int[width, height];
+        maze = new int[Width, Height];
 
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
+        for (int x = 0; x < Width; x++)
+            for (int y = 0; y < Height; y++)
                 maze[x, y] = 1;
 
         Carve(1, 1);
@@ -58,7 +58,7 @@ public class MazeGenerator_Tilemap : MonoBehaviour
             int nx = x + dir.x;
             int ny = y + dir.y;
 
-            if (nx > 0 && ny > 0 && nx < width - 1 && ny < height - 1 && maze[nx, ny] == 1)
+            if (nx > 0 && ny > 0 && nx < Width - 1 && ny < Height - 1 && maze[nx, ny] == 1)
             {
                 maze[x + dir.x / 2, y + dir.y / 2] = 0;
                 Carve(nx, ny);
@@ -71,28 +71,28 @@ public class MazeGenerator_Tilemap : MonoBehaviour
         List<Vector2Int> candidates = new List<Vector2Int>();
 
         // 上下邊界
-        for (int x = 1; x < width - 1; x += 2)
+        for (int x = 1; x < Width - 1; x += 2)
         {
             if (maze[x, 1] == 0)
             {
                 candidates.Add(new Vector2Int(x, 0)); // 下邊
             }
-            if (maze[x, height - 2] == 0)
+            if (maze[x, Height - 2] == 0)
             {
-                candidates.Add(new Vector2Int(x, height - 1)); // 上邊
+                candidates.Add(new Vector2Int(x, Height - 1)); // 上邊
             }
         }
 
         // 左右邊界
-        for (int y = 1; y < height - 1; y += 2)
+        for (int y = 1; y < Height - 1; y += 2)
         {
             if (maze[1, y] == 0)
             {
                 candidates.Add(new Vector2Int(0, y)); // 左邊
             }
-            if (maze[width - 2, y] == 0)
+            if (maze[Width - 2, y] == 0)
             {
-                candidates.Add(new Vector2Int(width - 1, y)); // 右邊
+                candidates.Add(new Vector2Int(Width - 1, y)); // 右邊
             }
         }
 
@@ -110,43 +110,43 @@ public class MazeGenerator_Tilemap : MonoBehaviour
 
         Vector3Int pos = new Vector3Int(exitPos.x, exitPos.y, 0);
 
-        if (exitTile != null)
+        if (ExitTile != null)
         {
-            tilemap.SetTile(pos, exitTile);
+            Tilemap.SetTile(pos, ExitTile);
         }
         else
         {
-            tilemap.SetTile(pos, floorTile);
+            Tilemap.SetTile(pos, FloorTile);
         }
     }
 
     void DrawMaze()
     {
-        tilemap.ClearAllTiles();
+        Tilemap.ClearAllTiles();
 
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < Width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < Height; y++)
             {
                 Vector3Int pos = new Vector3Int(x, y, 0);
                 if (maze[x, y] == 1)
-                    tilemap.SetTile(pos, wallTile);
+                    Tilemap.SetTile(pos, WallTile);
                 else
-                    tilemap.SetTile(pos, floorTile);
+                    Tilemap.SetTile(pos, FloorTile);
             }
         }
     }
 
     void CenterTilemap()
     {
-        BoundsInt bounds = tilemap.cellBounds;
+        BoundsInt bounds = Tilemap.cellBounds;
         Vector3Int centerCell = new Vector3Int(
             Mathf.FloorToInt(bounds.center.x),
             Mathf.FloorToInt(bounds.center.y),
             Mathf.FloorToInt(bounds.center.z)
         );
-        Vector3 centerWorld = tilemap.CellToWorld(centerCell);
-        tilemap.transform.position = -centerWorld;
+        Vector3 centerWorld = Tilemap.CellToWorld(centerCell);
+        Tilemap.transform.position = -centerWorld;
     }
 
     void Shuffle<T>(List<T> list)

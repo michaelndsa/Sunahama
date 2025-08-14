@@ -587,12 +587,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5ec511463e22d4448f292557d97a1a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 21
-  height: 21
-  tilemap: {fileID: 1273275040}
-  wallTile: {fileID: 11400000, guid: 83494efed4eda114dbc80b054da00f3d, type: 2}
-  floorTile: {fileID: 11400000, guid: f0b2c8824e2f39742a7325726236f99d, type: 2}
-  exitTile: {fileID: 0}
+  Width: 21
+  Height: 21
+  Tilemap: {fileID: 1273275040}
+  WallTile: {fileID: 11400000, guid: 83494efed4eda114dbc80b054da00f3d, type: 2}
+  FloorTile: {fileID: 11400000, guid: f0b2c8824e2f39742a7325726236f99d, type: 2}
+  ExitTile: {fileID: 11400000, guid: f0b2c8824e2f39742a7325726236f99d, type: 2}
 --- !u!4 &1661509452
 Transform:
   m_ObjectHideFlags: 0
