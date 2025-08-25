@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 957508813}
   - component: {fileID: 957508812}
   - component: {fileID: 957508815}
+  - component: {fileID: 957508816}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -229,7 +230,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 11
+  orthographic size: 3.75
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -267,19 +268,39 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957508811}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_AssetsPPU: 32
-  m_RefResolutionX: 320
-  m_RefResolutionY: 180
-  m_UpscaleRT: 0
+  m_RefResolutionX: 720
+  m_RefResolutionY: 480
+  m_UpscaleRT: 1
   m_PixelSnapping: 0
   m_CropFrameX: 0
   m_CropFrameY: 0
   m_StretchFill: 0
+--- !u!114 &957508816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957508811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56020146c0f5d154eb548072f47510c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1786277069}
+  MoveSmoothTime: 0.1
+  StopSmoothTime: 0.1
+  offset: {x: 0, y: 0, z: -10}
+  ppu: 32
+  useBounds: 1
+  minBounds: {x: 0, y: 0}
+  maxBounds: {x: 15, y: 15}
 --- !u!1 &1273275039
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,7 +561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82fa6855a994d254296ab49d94c1e043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menDamaPrefeb: {fileID: 8792488699671788768, guid: 18b0b9a2ad0e5cf4f9b9811e55515bfa, type: 3}
+  menDamaPrefeb: {fileID: 5156770811844705631, guid: 90fa9fd2a009ebb4da25600ecd85ebf0, type: 3}
   spawnCount: 1
   MazeGenerator: {fileID: 1661509451}
 --- !u!4 &1564442745
@@ -587,8 +608,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5ec511463e22d4448f292557d97a1a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Width: 21
-  Height: 21
+  Width: 15
+  Height: 15
   Tilemap: {fileID: 1273275040}
   WallTile: {fileID: 11400000, guid: 83494efed4eda114dbc80b054da00f3d, type: 2}
   FloorTile: {fileID: 11400000, guid: f0b2c8824e2f39742a7325726236f99d, type: 2}
@@ -619,6 +640,7 @@ GameObject:
   - component: {fileID: 1786277069}
   - component: {fileID: 1786277068}
   - component: {fileID: 1786277071}
+  - component: {fileID: 1786277075}
   - component: {fileID: 1786277070}
   - component: {fileID: 1786277072}
   - component: {fileID: 1786277073}
@@ -704,7 +726,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1786277067}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9dd215643a05fef489c38206b965e208, type: 3}
   m_Name: 
@@ -737,9 +759,9 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1786277070}
-        m_TargetAssemblyTypeName: TestImput, Assembly-CSharp
-        m_MethodName: WalkRight
+      - m_Target: {fileID: 1786277075}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -749,8 +771,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: d56c4122-fd14-40be-a00d-cb70d5b01579
-    m_ActionName: Player/WalkRight[/Keyboard/rightArrow]
+    m_ActionId: f16bf4a7-1dae-49d7-b4e5-297d92f9b124
+    m_ActionName: Player/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -779,7 +801,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -863,6 +885,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0.0116176605, y: -0.73654985}
   m_Size: {x: 0.5653534, y: 0.5653534}
   m_Direction: 0
+--- !u!114 &1786277075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786277067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00d08dbe66ac5fc4cb0737e2b6446c84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
