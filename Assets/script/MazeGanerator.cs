@@ -10,6 +10,8 @@ public class MazeGenerator_Tilemap : MonoBehaviour
     public Tile WallTile;
     public Tile FloorTile;
     public Tile ExitTile;
+    [Header("玩家參考")]
+    public PlayerSpawn player;
     public bool IsMazeReady() => maze != null;
     private int[,] maze;
 
@@ -19,7 +21,8 @@ public class MazeGenerator_Tilemap : MonoBehaviour
         DrawMaze();
         GenerateExit();
         GetMaze();
-        //CenterTilemap();
+        if (player != null)
+            player.MoveToMaze(this);
     }
     void GenerateMaze()
     {
@@ -136,19 +139,6 @@ public class MazeGenerator_Tilemap : MonoBehaviour
             }
         }
     }
-
-    void CenterTilemap()
-    {
-        BoundsInt bounds = Tilemap.cellBounds;
-        Vector3Int centerCell = new Vector3Int(
-            Mathf.FloorToInt(bounds.center.x),
-            Mathf.FloorToInt(bounds.center.y),
-            Mathf.FloorToInt(bounds.center.z)
-        );
-        Vector3 centerWorld = Tilemap.CellToWorld(centerCell);
-        Tilemap.transform.position = -centerWorld;
-    }
-
     void Shuffle<T>(List<T> list)
     {
         for (int i = 0; i < list.Count; i++)
