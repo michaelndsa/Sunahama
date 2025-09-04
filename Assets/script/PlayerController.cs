@@ -27,36 +27,32 @@ public class PlayerController : MonoBehaviour
     private bool isRunning = false;
     private bool canRun = true;
 
+    [Header("圖層調整")]
+    [SerializeField]
+    private float yOffSet = 0f;
+
     public bool IsHoldingBreath => isHoldingBreath;
+
+    private SpriteRenderer spriteRenderer;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         Stamina = maxStamina;
     }
 
-    // ========= InputSystem Callbacks =========
-    public void OnMove(InputAction.CallbackContext context)
+    // ========= 外部設定方法 =========
+    public void SetMoveInput(Vector2 input) => moveInput = input;
+    public void SetRunning(bool running) => isRunning = running;
+    public void SetHoldBreath(bool hold)
     {
-        moveInput = context.ReadValue<Vector2>();
-    }
-
-    public void OnRun(InputAction.CallbackContext context)
-    {
-        if (context.started)
-            isRunning = true;
-        else if (context.canceled)
-            isRunning = false;
-    }
-
-    public void OnHoldBreath(InputAction.CallbackContext context)
-    {
-        if (context.started && Stamina > 0f)
+        if (hold && Stamina > 0f)
         {
             isHoldingBreath = true;
             Debug.Log("玩家開始閉氣");
         }
-        else if (context.canceled)
+        else
         {
             isHoldingBreath = false;
             Debug.Log("玩家結束閉氣");
@@ -69,16 +65,16 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleStamina();
         UpdateUI();
+        UpdateSortingOrder();
     }
 
     private void HandleMovement()
     {
         float currentSpeed = walkSpeed;
 
-        // 閉氣時不能移動
         if (isHoldingBreath && Stamina > 0f)
         {
-            currentSpeed = 0f;
+            currentSpeed = 0f; // 閉氣時不能移動
         }
         else if (isRunning && canRun && Stamina > 0f)
         {
@@ -94,17 +90,14 @@ public class PlayerController : MonoBehaviour
 
     private void HandleStamina()
     {
-        // 閉氣消耗
         if (isHoldingBreath)
         {
             Stamina -= staminaDrainBreath * Time.fixedDeltaTime;
         }
-        // 跑步消耗
         else if (isRunning && moveInput != Vector2.zero && Stamina > 0f)
         {
             Stamina -= staminaDrainRun * Time.fixedDeltaTime;
         }
-        // 回復
         else
         {
             Stamina += staminaRegen * Time.fixedDeltaTime;
@@ -112,22 +105,31 @@ public class PlayerController : MonoBehaviour
 
         Stamina = Mathf.Clamp(Stamina, 0f, maxStamina);
 
-        // 氣量為0時限制
         if (Stamina <= 0f)
         {
             isHoldingBreath = false;
-            Debug.Log("玩家結束閉氣");
             canRun = false;
             isRunning = false;
+            Debug.Log("玩家結束閉氣 (氣量耗盡)");
         }
         else
         {
             canRun = true;
         }
     }
+
     private void UpdateUI()
     {
         if (staminaBar != null)
             staminaBar.value = Stamina;
+    }
+
+    // ========= Layer 排序依 y 軸 =========
+    private void UpdateSortingOrder()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sortingOrder = Mathf.RoundToInt((-transform.position.y * 100)+yOffSet);
+        }
     }
 }

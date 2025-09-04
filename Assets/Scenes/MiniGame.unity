@@ -445,7 +445,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190907912}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 4356cd628aac28a46b346454e446bf47, type: 3}
@@ -931,9 +931,9 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -697608769
+  m_SortingLayer: 1
+  m_SortingOrder: -100
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -1312,10 +1312,10 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1946847791
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 088b4ad8c7fb98746b408b73e5cdbf60, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.99607843}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1641,11 +1641,11 @@ GameObject:
   - component: {fileID: 1786277068}
   - component: {fileID: 1786277071}
   - component: {fileID: 1786277075}
-  - component: {fileID: 1786277070}
   - component: {fileID: 1786277072}
   - component: {fileID: 1786277073}
   - component: {fileID: 1786277074}
   - component: {fileID: 1786277076}
+  - component: {fileID: 1786277077}
   m_Layer: 0
   m_Name: girl
   m_TagString: Untagged
@@ -1691,8 +1691,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1946847791
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 4a2f6103343916f4c9f2c42fd7827ace, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1721,19 +1721,6 @@ Transform:
   - {fileID: 1963588507}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1786277070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786277067}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dd215643a05fef489c38206b965e208, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 6
 --- !u!114 &1786277071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1761,8 +1748,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1786277075}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1786277077}
+        m_TargetAssemblyTypeName: PlayerInputhandler, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -1777,8 +1764,8 @@ MonoBehaviour:
     m_ActionName: Player/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1786277075}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1786277077}
+        m_TargetAssemblyTypeName: PlayerInputhandler, Assembly-CSharp
         m_MethodName: OnHoldBreath
         m_Mode: 0
         m_Arguments:
@@ -1793,8 +1780,8 @@ MonoBehaviour:
     m_ActionName: Player/StopBreath[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1786277075}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1786277077}
+        m_TargetAssemblyTypeName: PlayerInputhandler, Assembly-CSharp
         m_MethodName: OnRun
         m_Mode: 0
         m_Arguments:
@@ -1941,6 +1928,7 @@ MonoBehaviour:
   Stamina: 0
   staminaBar: {fileID: 79962677}
   isHoldingBreath: 0
+  yOffSet: 40
 --- !u!114 &1786277076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1951,6 +1939,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07b79d0cd652aad4f9752b44b7d122e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1786277077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786277067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f9fb582c8de4cc41a05924e607327bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1901466035
@@ -2137,7 +2137,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1946847791
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 3eb07ab17d4b76c4db8f1c8d2f1d9bc3, type: 3}
   m_Color: {r: 0.9989935, g: 0.8459119, b: 1, a: 0.07450981}

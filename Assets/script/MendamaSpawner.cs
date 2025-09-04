@@ -1,36 +1,33 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MendamaSpawner : MonoBehaviour
 {
-    // Start is called before the first frame update
     public GameObject menDamaPrefeb;
     public int spawnCount = 1;
     public MazeRenderer MG;
     public MendamaCollectUI uiManager;
-    
-    private int[,] maze;
+
+    public int[,] maze;
 
     IEnumerator Start()
     {
         while (!MG.mazeGenerated)
             yield return null;
+
         maze = MG.GetMaze();
         SpawnMendamas();
         Debug.Log("Maze size: " + maze.GetLength(0) + " x " + maze.GetLength(1));
     }
 
     void SpawnMendamas()
-    { 
+    {
         List<Vector2Int> floorPositions = new List<Vector2Int>();
 
-        int width = maze.GetLength(0);
-        int height = maze.GetLength(1);
-
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < maze.GetLength(0); x++)
         {
-            for (int y = 0; y < height; y++) 
+            for (int y = 0; y < maze.GetLength(1); y++)
             {
                 if (maze[x, y] == 0)
                 {
@@ -40,21 +37,56 @@ public class MendamaSpawner : MonoBehaviour
         }
         Shuffle(floorPositions);
 
-        for (int i = 0; i < Mathf.Min(spawnCount, floorPositions.Count); i++)
+        List<Vector2Int> chosenPositions = new List<Vector2Int>();
+
+        for (int i = 0; i < floorPositions.Count; i++)
         {
             Vector2Int pos = floorPositions[i];
-            Vector3 worldPos = new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0f);
-            Instantiate(menDamaPrefeb, worldPos, Quaternion.identity);
-        }
-        uiManager.SetTotalCount(spawnCount);
 
+            bool tooClose = false;
+            for (int j = 0; j < chosenPositions.Count; j++)
+            {
+                Vector2Int chosen = chosenPositions[j];
+                if (Vector2Int.Distance(pos, chosen) <= 1.0f)
+                {
+                    tooClose = true;
+                    break;
+                }
+            }
+
+            if (tooClose == false)
+            {
+                chosenPositions.Add(pos);
+            }
+
+            if (chosenPositions.Count >= spawnCount)
+                break;
+        }
+
+        for (int i = 0; i < chosenPositions.Count; i++)
+        {
+            Vector2Int pos = chosenPositions[i];
+            Vector3 worldPos = new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0f);
+            GameObject obj = Instantiate(menDamaPrefeb, worldPos, Quaternion.identity);
+
+            SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sortingOrder = -Mathf.RoundToInt(pos.y * 100);
+            }
+        }
+
+        uiManager.SetTotalCount(chosenPositions.Count);
     }
+
     void Shuffle<T>(List<T> list)
     {
         for (int i = 0; i < list.Count; i++)
         {
             int rand = Random.Range(i, list.Count);
-            (list[i], list[rand]) = (list[rand], list[i]);
+            T temp = list[i];
+            list[i] = list[rand];
+            list[rand] = temp;
         }
     }
 }

@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: bottem
+    uniqueID: 3597358527
+    locked: 0
   - name: Effect
     uniqueID: 2348119505
     locked: 0
