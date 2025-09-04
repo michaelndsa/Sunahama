@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 public class PlayerSpawn : MonoBehaviour
 {
-    public void MoveToMaze(MazeGenerator_Tilemap mazeGenerator)
+    public void MoveToMaze(MazeRenderer renderer)
     {
-        int[,] maze = mazeGenerator.GetMaze();
+        int[,] maze = renderer.GetMaze();
         List<Vector2Int> freeTiles = new List<Vector2Int>();
 
-        for (int x = 1; x < mazeGenerator.Width - 1; x++)
+        for (int x = 1; x < renderer.Width - 1; x++)
         {
-            for (int y = 1; y < mazeGenerator.Height - 1; y++)
+            for (int y = 1; y < renderer.Height - 1; y++)
             {
                 if (maze[x, y] == 0) // 可走路
                     freeTiles.Add(new Vector2Int(x, y));

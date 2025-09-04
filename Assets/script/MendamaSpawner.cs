@@ -7,15 +7,16 @@ public class MendamaSpawner : MonoBehaviour
     // Start is called before the first frame update
     public GameObject menDamaPrefeb;
     public int spawnCount = 1;
-    public MazeGenerator_Tilemap MazeGenerator;
-
+    public MazeRenderer MG;
+    public MendamaCollectUI uiManager;
+    
     private int[,] maze;
 
     IEnumerator Start()
     {
-        while (!MazeGenerator.IsMazeReady())
+        while (!MG.mazeGenerated)
             yield return null;
-        maze = MazeGenerator.GetMaze();
+        maze = MG.GetMaze();
         SpawnMendamas();
         Debug.Log("Maze size: " + maze.GetLength(0) + " x " + maze.GetLength(1));
     }
@@ -45,6 +46,7 @@ public class MendamaSpawner : MonoBehaviour
             Vector3 worldPos = new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0f);
             Instantiate(menDamaPrefeb, worldPos, Quaternion.identity);
         }
+        uiManager.SetTotalCount(spawnCount);
 
     }
     void Shuffle<T>(List<T> list)
