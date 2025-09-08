@@ -4,20 +4,19 @@ using System.Collections.Generic;
 
 public class MazeRenderer : MonoBehaviour
 {
-    [Header("迷宮大小")]
-    public int Width = 21;
-    public int Height = 21;
+    [Header("迷宮生成參考")]
+    public MazeGenerator generator;
 
     [Header("Tilemap 參考")]
     public Tilemap Tilemap;
 
     [Header("牆壁 Tile & 權重")]
-    public Tile[] WallTiles;       // 牆 Tile 陣列
-    public int[] WallWeights;      // 權重，對應 WallTiles 索引
+    public Tile[] WallTiles;
+    public int[] WallWeights;
 
     [Header("地板 Tile & 權重")]
-    public Tile[] FloorTiles;      // 地板 Tile 陣列
-    public int[] FloorWeights;     // 權重，對應 FloorTiles 索引
+    public Tile[] FloorTiles;
+    public int[] FloorWeights;
 
     [Header("出口 Tile")]
     public Tile ExitTile;
@@ -31,8 +30,13 @@ public class MazeRenderer : MonoBehaviour
 
     void Start()
     {
-        // 生成迷宮數據
-        MazeGenerator generator = new MazeGenerator(Width, Height);
+        if (generator == null)
+        {
+            Debug.LogError("請在 Inspector 指定 MazeGenerator！");
+            return;
+        }
+
+        // 生成迷宮資料
         maze = generator.Generate();
 
         // 畫迷宮
@@ -51,15 +55,15 @@ public class MazeRenderer : MonoBehaviour
     {
         Tilemap.ClearAllTiles();
 
-        for (int x = 0; x < Width; x++)
+        for (int x = 0; x < maze.GetLength(0); x++)
         {
-            for (int y = 0; y < Height; y++)
+            for (int y = 0; y < maze.GetLength(1); y++)
             {
                 Vector3Int pos = new Vector3Int(x, y, 0);
 
-                if (maze[x, y] == 1) // 牆
+                if (maze[x, y] == 1)
                     Tilemap.SetTile(pos, GetRandomTile(WallTiles, WallWeights));
-                else // 地板
+                else
                     Tilemap.SetTile(pos, GetRandomTile(FloorTiles, FloorWeights));
             }
         }
@@ -69,18 +73,21 @@ public class MazeRenderer : MonoBehaviour
     {
         List<Vector2Int> candidates = new List<Vector2Int>();
 
+        int width = maze.GetLength(0);
+        int height = maze.GetLength(1);
+
         // 上下邊界
-        for (int x = 1; x < Width - 1; x += 2)
+        for (int x = 1; x < width - 1; x += 2)
         {
             if (maze[x, 1] == 0) candidates.Add(new Vector2Int(x, 0));
-            if (maze[x, Height - 2] == 0) candidates.Add(new Vector2Int(x, Height - 1));
+            if (maze[x, height - 2] == 0) candidates.Add(new Vector2Int(x, height - 1));
         }
 
         // 左右邊界
-        for (int y = 1; y < Height - 1; y += 2)
+        for (int y = 1; y < height - 1; y += 2)
         {
             if (maze[1, y] == 0) candidates.Add(new Vector2Int(0, y));
-            if (maze[Width - 2, y] == 0) candidates.Add(new Vector2Int(Width - 1, y));
+            if (maze[width - 2, y] == 0) candidates.Add(new Vector2Int(width - 1, y));
         }
 
         if (candidates.Count == 0) return;
@@ -121,5 +128,4 @@ public class MazeRenderer : MonoBehaviour
     {
         return maze;
     }
-
 }

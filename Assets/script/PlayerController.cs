@@ -23,15 +23,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Slider staminaBar;
 
     [Header("狀態")]
-    [SerializeField] private bool isHoldingBreath = false;
-    private bool isRunning = false;
-    private bool canRun = true;
+    public bool IsHoldingBreath = false;
+    public bool IsRunning = false;
+    public bool CanRun = true;
+    public bool IsCollecting = false;
 
     [Header("圖層調整")]
     [SerializeField]
     private float yOffSet = 0f;
-
-    public bool IsHoldingBreath => isHoldingBreath;
 
     private SpriteRenderer spriteRenderer;
 
@@ -44,18 +43,31 @@ public class PlayerController : MonoBehaviour
 
     // ========= 外部設定方法 =========
     public void SetMoveInput(Vector2 input) => moveInput = input;
-    public void SetRunning(bool running) => isRunning = running;
+    public void SetRunning(bool running) => IsRunning = running;
     public void SetHoldBreath(bool hold)
     {
         if (hold && Stamina > 0f)
         {
-            isHoldingBreath = true;
+            IsHoldingBreath = true;
             Debug.Log("玩家開始閉氣");
         }
         else
         {
-            isHoldingBreath = false;
+            IsHoldingBreath = false;
             Debug.Log("玩家結束閉氣");
+        }
+    }
+    public void SetStartCollect(bool hold)
+    {
+        if (hold)
+        {
+            IsCollecting = true;
+            Debug.Log("玩家開始蒐集");
+        }
+        else 
+        { 
+            IsCollecting = false;
+            Debug.Log("玩家放棄蒐集");
         }
     }
 
@@ -72,15 +84,15 @@ public class PlayerController : MonoBehaviour
     {
         float currentSpeed = walkSpeed;
 
-        if (isHoldingBreath && Stamina > 0f)
+        if (IsHoldingBreath && Stamina > 0f)
         {
             currentSpeed = 0f; // 閉氣時不能移動
         }
-        else if (isRunning && canRun && Stamina > 0f)
+        else if (IsRunning && CanRun && Stamina > 0f)
         {
             currentSpeed = runSpeed;
         }
-        else if (!canRun)
+        else if (!CanRun)
         {
             currentSpeed = slowSpeed; // 氣量歸零只能慢走
         }
@@ -90,11 +102,11 @@ public class PlayerController : MonoBehaviour
 
     private void HandleStamina()
     {
-        if (isHoldingBreath)
+        if (IsHoldingBreath)
         {
             Stamina -= staminaDrainBreath * Time.fixedDeltaTime;
         }
-        else if (isRunning && moveInput != Vector2.zero && Stamina > 0f)
+        else if (IsRunning && moveInput != Vector2.zero && Stamina > 0f)
         {
             Stamina -= staminaDrainRun * Time.fixedDeltaTime;
         }
@@ -107,14 +119,14 @@ public class PlayerController : MonoBehaviour
 
         if (Stamina <= 0f)
         {
-            isHoldingBreath = false;
-            canRun = false;
-            isRunning = false;
+            IsHoldingBreath = false;
+            CanRun = false;
+            IsRunning = false;
             Debug.Log("玩家結束閉氣 (氣量耗盡)");
         }
         else
         {
-            canRun = true;
+            CanRun = true;
         }
     }
 

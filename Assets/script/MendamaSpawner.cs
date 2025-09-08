@@ -63,12 +63,22 @@ public class MendamaSpawner : MonoBehaviour
                 break;
         }
 
+        int mazeHeight = maze.GetLength(1);
+
         for (int i = 0; i < chosenPositions.Count; i++)
         {
             Vector2Int pos = chosenPositions[i];
             Vector3 worldPos = new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0f);
             GameObject obj = Instantiate(menDamaPrefeb, worldPos, Quaternion.identity);
 
+            MendamaCollectController controller = obj.GetComponent<MendamaCollectController>();
+            // 判斷是否在最上排
+            if (pos.y == mazeHeight - 2)
+            {
+                controller.isTopRow = true;
+            }
+
+            // 排序
             SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
             if (sr != null)
             {

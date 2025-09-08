@@ -72,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1946847791
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 1ee59ea7001b62d4ca8513eb7cb886f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -105,19 +105,22 @@ MonoBehaviour:
   leaveRangeFactor: 3
   orbitTimeBeforeAttack: 2
   extraOrbitTime: 3
-  wiggleDuration: 5
+  wiggleHoverTime: 0.3
+  wiggleDriftTime: 2
+  wiggleEndPauseTime: 0.3
   vanishFadeTime: 1
   vanishWaitTime: 5
-  patrolMinSpeed: 1
-  patrolMaxSpeed: 3
-  chaseSpeed: 5
+  patrolSpeedFactor: 1
+  patrolDelay: 2
+  chaseSpeedFactor: 1
+  orbitSpeedFactor: 1
   leaveSpeedFactor: 0.5
-  orbitSpeed: 100
   minAlpha: 0
   maxAlpha: 1
   flickerSpeed: 1
   holdTime: 0.5
   wiggleRoundTrips: 1
-  wiggleHoverTime: 0.3
-  wiggleDriftTime: 2
-  wiggleEndPauseTime: 0.3
+  patrolMinSpeed: 1
+  patrolMaxSpeed: 3
+  chaseSpeed: 5
+  orbitSpeed: 100

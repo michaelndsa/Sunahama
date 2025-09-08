@@ -32,4 +32,16 @@ public class PlayerInputHandler : MonoBehaviour
         else if (context.canceled)
             controller.SetHoldBreath(false);
     }
+
+    public void OnCollect(InputAction.CallbackContext context)
+    {
+        if (context.performed)  // 玩家按下 Z 開始長按
+        {
+            controller.SetStartCollect(true);
+        }
+        else if (context.canceled) // 玩家放開 Z
+        {
+            controller.SetStartCollect(false);
+        }
+    }
 }

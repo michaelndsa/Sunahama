@@ -26,9 +26,11 @@ public class EnemyPatrolFree : MonoBehaviour
 
     [Header("速度設定")] 
     [Range(0f, 2f)] public float patrolSpeedFactor = 1f;
+    [Range(0f, 3f)] public float patrolDelay = 3f;
     [Range(0f, 2f)] public float chaseSpeedFactor = 1f;
     [Range(0f, 2f)] public float orbitSpeedFactor = 1f;
     [Range(0f, 2f)] public float leaveSpeedFactor = 0.5f;
+
 
     [Header("透明度設定")]
     [Range(0f, 1f)] public float minAlpha = 0.3f;
@@ -142,7 +144,7 @@ public class EnemyPatrolFree : MonoBehaviour
         transform.position += (Vector3)(dir * moveSpeed * patrolSpeedFactor * Time.deltaTime);
         if (Vector2.Distance(transform.position, targetPos) < 0.2f)
         {
-            Invoke("PickRandomTarget",1f);
+            Invoke("PickRandomTarget",patrolDelay);
             
         }
         
