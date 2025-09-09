@@ -51,6 +51,21 @@ public class MazeRenderer : MonoBehaviour
             player.MoveToMaze(this);
     }
 
+    public void RegenerateMaze()
+    {
+        // 重新生成迷宮資料
+        maze = generator.Generate();
+
+        // 清空 Tilemap
+        Tilemap.ClearAllTiles();
+
+        // 重畫迷宮
+        DrawMaze();
+
+        // 重新產生出口
+        GenerateExit();
+    }
+
     void DrawMaze()
     {
         Tilemap.ClearAllTiles();
@@ -103,6 +118,24 @@ public class MazeRenderer : MonoBehaviour
             Tilemap.SetTile(pos, GetRandomTile(FloorTiles, FloorWeights));
     }
 
+    public void OpenExit()
+    {
+        int width = maze.GetLength(0);
+        int height = maze.GetLength(1);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (Tilemap.GetTile(new Vector3Int(x, y, 0)) == ExitTile)
+                {
+                    // 換成沒有碰撞的地板 tile
+                    Tilemap.SetTile(new Vector3Int(x, y, 0), GetRandomTile(FloorTiles, FloorWeights));
+                    return;
+                }
+            }
+        }
+    }
     Tile GetRandomTile(Tile[] tiles, int[] weights)
     {
         if (tiles == null || tiles.Length == 0 || weights == null || tiles.Length != weights.Length)

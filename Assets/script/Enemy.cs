@@ -47,14 +47,19 @@ public class EnemyPatrolFree : MonoBehaviour
     private float startAngle, targetAngle;
     private Vector3 center;
 
+    [Header("重新生成")]
+    public MazeRenderer mazeRenderer;
+    public PlayerSpawn playerSpawn;
+    public MendamaSpawner mdManager;
     // ====================== 私有變數 ======================
-    public float patrolMinSpeed = 1f;
-    public float patrolMaxSpeed = 1.3f;
-    public float chaseSpeed = 3f;
-    public float orbitSpeed = 120f;
+    private float patrolMinSpeed = 1f;
+    private float patrolMaxSpeed = 1.3f;
+    private float chaseSpeed = 3f;
+    private float orbitSpeed = 120f;
     private Vector2 targetPos;
     private float moveSpeed;
     private float orbitTimer = 0f;
+    private float spawnDelay = 10f;
     private PlayerController pc;
     private SpriteRenderer sr;
 
@@ -228,7 +233,18 @@ public class EnemyPatrolFree : MonoBehaviour
     void Attack()
     {
         Debug.Log("敵人攻擊玩家！");
-        state = State.Chase;
+        PickSpawnOutsideMap();
+
+        mazeRenderer.RegenerateMaze();
+
+        // 玩家重新放進迷宮
+        playerSpawn.MoveToMaze(mazeRenderer);
+
+        // 重新生成 mendama
+        mdManager.RespawnMendamas();
+        
+        state = State.Patrol;
+
     }
 
     void LeavePlayer()
@@ -283,6 +299,6 @@ public class EnemyPatrolFree : MonoBehaviour
             case 3: y = areaMax.y + margin; x = Random.Range(areaMin.x, areaMax.x); break;
         }
         transform.position = new Vector2(x, y);
-        PickRandomTarget();
+        Invoke("PickRandomTarget", spawnDelay);
     }
 }

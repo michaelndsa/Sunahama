@@ -7,6 +7,7 @@ public class MendamaCollectUI : MonoBehaviour
 {
     public Image MdCollect;
     public TextMeshProUGUI collectText;
+    public MazeRenderer MR;
 
     private int collectCount = 0;
     private int totalCount = 0;
@@ -15,6 +16,7 @@ public class MendamaCollectUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        MR = FindObjectOfType<MazeRenderer>();
         UpdateCollectUI();
     }
 
@@ -32,8 +34,9 @@ public class MendamaCollectUI : MonoBehaviour
         if (collectCount >= totalCount)
         {
             Debug.Log("全部收集完成！");
-            // 這裡之後可以呼叫 PlayerAura.OnAllCollected() 或 Exit.Open()
+            MR.OpenExit();
         }
+        
     }
 
     private void UpdateCollectUI() 

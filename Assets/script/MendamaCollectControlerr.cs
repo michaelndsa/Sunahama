@@ -19,25 +19,34 @@ public class MendamaCollectController : MonoBehaviour
     private CollectMDUI collectUI;
     private MendamaCollectUI MdCollectUI;
     private MazeGenerator mazeGen;
+    private PlayerInputHandler playerInputHandler;
 
     private Vector3 offsetToUse;
 
     private void Start()
     {
         if (player == null)
+        {
             player = FindObjectOfType<PlayerController>();
-
+        }
         if (collectUI == null)
         {
             collectUI = FindObjectOfType<CollectMDUI>();
         }
 
         if (MdCollectUI == null)
+        {
             MdCollectUI = FindObjectOfType<MendamaCollectUI>();
-        
-        if(mazeGen == null)
+        }
+        if (mazeGen == null)
+        {
             mazeGen = FindObjectOfType<MazeGenerator>();
+        }
 
+        if (playerInputHandler == null)
+        {
+            playerInputHandler = FindObjectOfType<PlayerInputHandler>();
+        }
 
     }
 
@@ -47,7 +56,7 @@ public class MendamaCollectController : MonoBehaviour
 
         // 計算玩家距離
         float distance = Vector3.Distance(player.transform.position, transform.position);
-        bool isInside = distance <= collectRadius;   
+        bool isInside = distance <= collectRadius;
 
         // ---- 進出範圍判斷 ----
         if (isInside && !wasInside)
@@ -62,8 +71,12 @@ public class MendamaCollectController : MonoBehaviour
             collectProgress = 0f;
             collectUI.Hide();
         }
+        else if (playerInputHandler.IsHoldingBreath == true)
+        {
+            collectProgress = 0f;
+        }
 
-        wasInside = isInside;
+            wasInside = isInside;
 
         // ---- 收集進度 ----
         if (isInside && player.IsCollecting)

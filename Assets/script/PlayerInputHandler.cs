@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerInputHandler : MonoBehaviour
 {
     private PlayerController controller;
+    public bool IsHoldingBreath = false;
 
     private void Awake()
     {
@@ -28,14 +29,20 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnHoldBreath(InputAction.CallbackContext context)
     {
         if (context.started)
+        {
             controller.SetHoldBreath(true);
+            IsHoldingBreath = true;
+        }
         else if (context.canceled)
+        {
             controller.SetHoldBreath(false);
+            IsHoldingBreath = false;
+        }
     }
 
     public void OnCollect(InputAction.CallbackContext context)
     {
-        if (context.performed)  // 玩家按下 Z 開始長按
+        if (context.performed && IsHoldingBreath == false)  // 玩家按下 Z 開始長按
         {
             controller.SetStartCollect(true);
         }

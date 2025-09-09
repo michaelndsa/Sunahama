@@ -1272,7 +1272,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1600973155
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1504,6 +1504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MdCollect: {fileID: 1901466037}
   collectText: {fileID: 23806680}
+  MR: {fileID: 0}
 --- !u!1 &1734173448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1986,6 +1987,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f9fb582c8de4cc41a05924e607327bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsHoldingBreath: 0
 --- !u!1 &1901466035
 GameObject:
   m_ObjectHideFlags: 0
@@ -2439,9 +2441,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1786277069}
     - target: {fileID: 4502062693869624769, guid: b51d1d08b05d84d46a48f51040c2657a, type: 3}
+      propertyPath: mdManager
+      value: 
+      objectReference: {fileID: 1564442744}
+    - target: {fileID: 4502062693869624769, guid: b51d1d08b05d84d46a48f51040c2657a, type: 3}
       propertyPath: patrolDelay
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4502062693869624769, guid: b51d1d08b05d84d46a48f51040c2657a, type: 3}
+      propertyPath: playerSpawn
+      value: 
+      objectReference: {fileID: 1786277076}
+    - target: {fileID: 4502062693869624769, guid: b51d1d08b05d84d46a48f51040c2657a, type: 3}
+      propertyPath: mazeRenderer
+      value: 
+      objectReference: {fileID: 1661509453}
     - target: {fileID: 4502062693869624769, guid: b51d1d08b05d84d46a48f51040c2657a, type: 3}
       propertyPath: leaveRangeFactor
       value: 5

@@ -11,6 +11,8 @@ public class MendamaSpawner : MonoBehaviour
 
     public int[,] maze;
 
+    private List<GameObject> spawnedMendamas = new List<GameObject>();
+
     IEnumerator Start()
     {
         while (!MG.mazeGenerated)
@@ -19,6 +21,27 @@ public class MendamaSpawner : MonoBehaviour
         maze = MG.GetMaze();
         SpawnMendamas();
         Debug.Log("Maze size: " + maze.GetLength(0) + " x " + maze.GetLength(1));
+    }
+
+    public void RespawnMendamas()
+    {
+        // 1. 刪除舊的
+        for (int i = 0; i < spawnedMendamas.Count; i++)
+        {
+            GameObject obj = spawnedMendamas[i];
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+        spawnedMendamas.Clear();
+
+        // 2. 更新迷宮資料
+        maze = MG.GetMaze();
+
+        // 3. 重新生成
+        SpawnMendamas();
+        Debug.Log("Mendamas respawned!");
     }
 
     void SpawnMendamas()
@@ -54,7 +77,7 @@ public class MendamaSpawner : MonoBehaviour
                 }
             }
 
-            if (tooClose == false)
+            if (!tooClose)
             {
                 chosenPositions.Add(pos);
             }
@@ -72,18 +95,19 @@ public class MendamaSpawner : MonoBehaviour
             GameObject obj = Instantiate(menDamaPrefeb, worldPos, Quaternion.identity);
 
             MendamaCollectController controller = obj.GetComponent<MendamaCollectController>();
-            // 判斷是否在最上排
             if (pos.y == mazeHeight - 2)
             {
                 controller.isTopRow = true;
             }
 
-            // 排序
             SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
             if (sr != null)
             {
                 sr.sortingOrder = -Mathf.RoundToInt(pos.y * 100);
             }
+
+            // 記錄下來方便清理
+            spawnedMendamas.Add(obj);
         }
 
         uiManager.SetTotalCount(chosenPositions.Count);
