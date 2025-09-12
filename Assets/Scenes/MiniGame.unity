@@ -445,7 +445,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190907912}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 4356cd628aac28a46b346454e446bf47, type: 3}
@@ -1506,10 +1506,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2aca183bb5562d4393ab9195ca85872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectCount: 0
   MdCollect: {fileID: 1901466037}
   collectText: {fileID: 23806680}
-  MR: {fileID: 0}
-  collectCount: 0
+  Lt: {fileID: 0}
 --- !u!1 &1734173448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1614,10 +1614,10 @@ Canvas:
   m_GameObject: {fileID: 1754822271}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 957508813}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -1625,8 +1625,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1946847791
+  m_SortingOrder: 9999
   m_TargetDisplay: 0
 --- !u!224 &1754822275
 RectTransform:
@@ -1970,12 +1970,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00d08dbe66ac5fc4cb0737e2b6446c84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 1.5
-  runSpeed: 2
-  slowSpeed: 1
+  walkSpeed: 0.8
+  runSpeed: 1.5
+  slowSpeed: 0.08
   maxStamina: 130
-  staminaDrainRun: 8
-  staminaDrainBreath: 10
+  staminaDrainRun: 20
+  staminaDrainBreath: 7
   staminaRegen: 5
   Stamina: 0
   staminaBar: {fileID: 79962677}
@@ -1985,7 +1985,7 @@ MonoBehaviour:
   CanRun: 1
   IsCollecting: 0
   CanUseAbility: 0
-  yOffSet: 40
+  yOffSet: 25
 --- !u!114 &1786277076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2198,7 +2198,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 3eb07ab17d4b76c4db8f1c8d2f1d9bc3, type: 3}
-  m_Color: {r: 0.9989935, g: 0.8459119, b: 1, a: 0.07450981}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2242,11 +2242,15 @@ MonoBehaviour:
   holdBreathFlickerSpeed: 0.5
   minAlpha: 0
   maxAlpha: 0.1
+  minHoldBreathAlpha: 0.8
+  maxHoldBreathAlpha: 0.9
   normalColor: {r: 1, g: 0.84705883, b: 1, a: 0.07450981}
   holdBreathColor: {r: 0, g: 0, b: 0, a: 1}
   smoothSpeed: 2
   colorSmoothSpeed: 3
-  targetSize: 0
+  fullScreenSize: 20
+  blackBackground: {fileID: 1600973154}
+  targetSize: 100
 --- !u!1 &2080532787
 GameObject:
   m_ObjectHideFlags: 0
@@ -2474,6 +2478,10 @@ PrefabInstance:
       propertyPath: mdManager
       value: 
       objectReference: {fileID: 1564442744}
+    - target: {fileID: 4502062693869624769, guid: b51d1d08b05d84d46a48f51040c2657a, type: 3}
+      propertyPath: chaseRange
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4502062693869624769, guid: b51d1d08b05d84d46a48f51040c2657a, type: 3}
       propertyPath: patrolDelay
       value: 2
@@ -2787,7 +2795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressImage: {fileID: 3934421162884717216}
-  zKeyObj: {fileID: 72021427541229605}
+  keyHintText: {fileID: 570818122988740900}
 --- !u!114 &9125530949165123932
 MonoBehaviour:
   m_ObjectHideFlags: 0

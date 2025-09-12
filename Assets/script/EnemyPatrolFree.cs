@@ -76,7 +76,10 @@ public class EnemyPatrolFree : MonoBehaviour
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        if (player != null) pc = player.GetComponent<PlayerController>();
+        if (player != null)
+        {
+            pc = player.GetComponent<PlayerController>();
+        }
         PickSpawnOutsideMap();
     }
 
@@ -349,5 +352,10 @@ public class EnemyPatrolFree : MonoBehaviour
 
         transform.position = spawnVectorTemp;
         Invoke("PickRandomTarget", spawnDelay);
+    }
+
+    public void Disable()
+    {
+        gameObject.SetActive(false);
     }
 }

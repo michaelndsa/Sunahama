@@ -156,11 +156,12 @@ MonoBehaviour:
   holdBreathFlickerSpeed: 2
   minAlpha: 0
   maxAlpha: 0.1
+  minHoldBreathAlpha: 0
+  maxHoldBreathAlpha: 0.1
   normalColor: {r: 1, g: 0, b: 0, a: 1}
   holdBreathColor: {r: 1, g: 0, b: 0, a: 1}
   smoothSpeed: 2
   colorSmoothSpeed: 3
-  flickerSpeedSmooth: 2
   targetSize: 0
 --- !u!1 &7827989241693985972
 GameObject:

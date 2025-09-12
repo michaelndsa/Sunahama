@@ -187,8 +187,30 @@
                 },
                 {
                     "name": "",
+                    "id": "02544c56-7980-4fea-a265-3240fd463b68",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StopBreath",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ddbaad73-a556-41ec-96ed-c46593c62893",
                     "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "219a98ce-ffbc-4d18-a4e7-1f265db898ff",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -210,7 +232,7 @@
                 {
                     "name": "",
                     "id": "6af1605d-fa62-4d33-bed9-e02ba5d018c8",
-                    "path": "",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -222,6 +244,17 @@
                     "name": "",
                     "id": "4f9729bb-9bae-4f55-89f3-adeb09b3c4f6",
                     "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UseMendama",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54829518-fa81-4a26-bec7-94f69e80a949",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

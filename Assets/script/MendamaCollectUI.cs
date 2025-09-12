@@ -5,18 +5,22 @@ using TMPro;
 
 public class MendamaCollectUI : MonoBehaviour
 {
+    public int collectCount = 0;
     public Image MdCollect;
     public TextMeshProUGUI collectText;
-    public MazeRenderer MR;
+    public BreathingLight Lt;
 
-    public int collectCount = 0;
+
     private int totalCount = 0;
-
+    private MazeRenderer MR;
+    private EnemyPatrolFree Ep;
 
     // Start is called before the first frame update
     void Start()
     {
         MR = FindObjectOfType<MazeRenderer>();
+        Lt = FindObjectOfType<BreathingLight>();
+        Ep = FindObjectOfType<EnemyPatrolFree>();
         UpdateCollectUI();
     }
 
@@ -35,6 +39,8 @@ public class MendamaCollectUI : MonoBehaviour
         {
             Debug.Log("全部收集完成！");
             MR.OpenExit();
+            Lt.OnAllCollected();
+            Ep.Disable();
         }
         
     }
