@@ -40,6 +40,15 @@ public class PlayerInputHandler : MonoBehaviour
         }
     }
 
+    public void OnUseMendama(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            controller.UseHideAbility();
+            
+        }
+    }
+
     public void OnCollect(InputAction.CallbackContext context)
     {
         if (context.performed && IsHoldingBreath == false)  // 玩家按下 Z 開始長按

@@ -20,32 +20,21 @@ public class MendamaCollectController : MonoBehaviour
     private MendamaCollectUI MdCollectUI;
     private MazeGenerator mazeGen;
     private PlayerInputHandler playerInputHandler;
-
+    private SpriteRenderer sr;
     private Vector3 offsetToUse;
 
     private void Start()
-    {
-        if (player == null)
+    {      
+        player = FindObjectOfType<PlayerController>();
+        collectUI = FindObjectOfType<CollectMDUI>();               
+        MdCollectUI = FindObjectOfType<MendamaCollectUI>();        
+        mazeGen = FindObjectOfType<MazeGenerator>();            
+        playerInputHandler = FindObjectOfType<PlayerInputHandler>();        
+        sr = GetComponent<SpriteRenderer>();
+        
+        if (sr != null)
         {
-            player = FindObjectOfType<PlayerController>();
-        }
-        if (collectUI == null)
-        {
-            collectUI = FindObjectOfType<CollectMDUI>();
-        }
-
-        if (MdCollectUI == null)
-        {
-            MdCollectUI = FindObjectOfType<MendamaCollectUI>();
-        }
-        if (mazeGen == null)
-        {
-            mazeGen = FindObjectOfType<MazeGenerator>();
-        }
-
-        if (playerInputHandler == null)
-        {
-            playerInputHandler = FindObjectOfType<PlayerInputHandler>();
+            sr.sortingOrder = -Mathf.RoundToInt(transform.position.y * 100f);
         }
 
     }

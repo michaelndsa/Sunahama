@@ -56,10 +56,17 @@ public class EnemyPatrolFree : MonoBehaviour
     private float patrolMaxSpeed = 1.3f;
     private float chaseSpeed = 3f;
     private float orbitSpeed = 120f;
-    private Vector2 targetPos;
     private float moveSpeed;
     private float orbitTimer = 0f;
     private float spawnDelay = 10f;
+    private float spawnX, spawnY;
+    private float spawnMinDistance = 10f;
+    private float minDistance = 5f;
+    private bool validSpawn;
+    private int attempts;
+    private Vector2 tempTarget;
+    private Vector2 spawnVectorTemp;
+    private Vector2 targetPos;
     private PlayerController pc;
     private SpriteRenderer sr;
 
@@ -99,13 +106,20 @@ public class EnemyPatrolFree : MonoBehaviour
                 }
                 else if (distToPlayer > chaseRange)
                     state = State.Patrol;
+                if (pc != null && pc.UsedSpecialAbility)
+                {
+                    state = State.Wiggle;          // 強制進 Wiggle
+                }
                 break;
 
             case State.Orbit:
                 Orbit();
                 orbitTimer += Time.deltaTime;
-                if (pc != null && pc.IsHoldingBreath)
-                    state = State.Wiggle; // 玩家閉氣 → Wiggle
+                if (pc != null && pc.UsedSpecialAbility)
+                {
+                    state = State.Wiggle;          // 強制進 Wiggle
+                }
+
                 else if (orbitTimer >= orbitTimeBeforeAttack)
                     state = State.Attack; // 過時間 → 攻擊
                 if (distToPlayer > orbitRange)
@@ -122,6 +136,7 @@ public class EnemyPatrolFree : MonoBehaviour
 
             case State.Leave:
                 LeavePlayer();
+                pc.UsedSpecialAbility = false;
                 break;
 
             case State.Vanish:
@@ -139,6 +154,10 @@ public class EnemyPatrolFree : MonoBehaviour
             Color c = sr.color;
             c.a = Mathf.Lerp(minAlpha, maxAlpha, alpha01);
             sr.color = c;
+        }
+        if (pc != null)
+        {
+            pc.CanUseAbility = (state == State.Chase || state == State.Orbit);
         }
     }
 
@@ -222,12 +241,7 @@ public class EnemyPatrolFree : MonoBehaviour
 
         transform.rotation = Quaternion.identity;
 
-        if (pc != null && (!pc.IsHoldingBreath || pc.Stamina <= 0f))
-        {
-            wiggleInit = false;
-            state = State.Attack;
-            Debug.Log("敵人發現玩家沒氣，直接攻擊！");
-        }
+      
     }
 
     void Attack()
@@ -280,25 +294,60 @@ public class EnemyPatrolFree : MonoBehaviour
 
     void PickRandomTarget()
     {
-        float x = Random.Range(areaMin.x, areaMax.x);
-        float y = Random.Range(areaMin.y, areaMax.y);
-        targetPos = new Vector2(x, y);
+        attempts = 0;
+
+        for (attempts = 0; attempts < 100; attempts++)
+        {
+            tempTarget.x = Random.Range(areaMin.x, areaMax.x);
+            tempTarget.y = Random.Range(areaMin.y, areaMax.y);
+
+            if (Vector2.Distance(tempTarget, transform.position) >= minDistance)
+            {
+                break; // 找到符合距離的目標就跳出
+            }
+        }
+
+        targetPos = tempTarget;
         moveSpeed = Random.Range(patrolMinSpeed, patrolMaxSpeed);
     }
 
     void PickSpawnOutsideMap()
     {
-        float margin = 2f;
-        int side = Random.Range(0, 4);
-        float x = 0f, y = 0f;
-        switch (side)
+        validSpawn = false;
+
+        while (!validSpawn)
         {
-            case 0: x = areaMin.x - margin; y = Random.Range(areaMin.y, areaMax.y); break;
-            case 1: x = areaMax.x + margin; y = Random.Range(areaMin.y, areaMax.y); break;
-            case 2: y = areaMin.y - margin; x = Random.Range(areaMin.x, areaMax.x); break;
-            case 3: y = areaMax.y + margin; x = Random.Range(areaMin.x, areaMax.x); break;
+            // 決定生成在水平還是垂直
+            if (Random.value > 0.5f)
+            {
+                // 水平
+                if (player.position.x < (areaMin.x + areaMax.x) / 2f)
+                    spawnX = areaMax.x + 2f; // 玩家在左 → 生在右
+                else
+                    spawnX = areaMin.x - 2f; // 玩家在右 → 生在左
+
+                spawnY = areaMin.y + Random.value * (areaMax.y - areaMin.y);
+            }
+            else
+            {
+                // 垂直
+                if (player.position.y < (areaMin.y + areaMax.y) / 2f)
+                    spawnY = areaMax.y + 2f; // 玩家在下 → 生在上
+                else
+                    spawnY = areaMin.y - 2f; // 玩家在上 → 生在下
+
+                spawnX = areaMin.x + Random.value * (areaMax.x - areaMin.x);
+            }
+
+            spawnVectorTemp.x = spawnX;
+            spawnVectorTemp.y = spawnY;
+
+            // 判斷距離玩家是否足夠
+            if (Vector2.Distance(spawnVectorTemp, player.position) >= spawnMinDistance)
+                validSpawn = true;
         }
-        transform.position = new Vector2(x, y);
+
+        transform.position = spawnVectorTemp;
         Invoke("PickRandomTarget", spawnDelay);
     }
 }

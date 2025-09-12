@@ -9,7 +9,7 @@ public class MendamaCollectUI : MonoBehaviour
     public TextMeshProUGUI collectText;
     public MazeRenderer MR;
 
-    private int collectCount = 0;
+    public int collectCount = 0;
     private int totalCount = 0;
 
 
@@ -37,6 +37,11 @@ public class MendamaCollectUI : MonoBehaviour
             MR.OpenExit();
         }
         
+    }
+    public void UpdateUsed()
+    {
+            collectCount--;
+            UpdateCollectUI();
     }
 
     private void UpdateCollectUI() 

@@ -445,7 +445,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190907912}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 4356cd628aac28a46b346454e446bf47, type: 3}
@@ -1238,9 +1238,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menDamaPrefeb: {fileID: 7827989241693985972, guid: dd5dcc10bd58560449b4a07d534b925c, type: 3}
-  spawnCount: 5
   MG: {fileID: 1661509453}
-  uiManager: {fileID: 1669574802}
+  uiManager: {fileID: 8697228528067113098}
+  uiCount: {fileID: 1669574802}
+  spawnCount: 5
+  mazeWidth: 0
+  mazeHeight: 0
+  exitPos: {x: 0, y: 0}
 --- !u!4 &1564442745
 Transform:
   m_ObjectHideFlags: 0
@@ -1272,7 +1276,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1600973155
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1505,6 +1509,7 @@ MonoBehaviour:
   MdCollect: {fileID: 1901466037}
   collectText: {fileID: 23806680}
   MR: {fileID: 0}
+  collectCount: 0
 --- !u!1 &1734173448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1825,6 +1830,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 136b034d-bd30-4728-b2f4-e9f2c4217613
     m_ActionName: Player/Collect
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1786277077}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnUseMendama
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 14605974-c26c-4bef-b788-a5759182d98e
+    m_ActionName: Player/UseMendama[/Keyboard/x]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1959,9 +1980,11 @@ MonoBehaviour:
   Stamina: 0
   staminaBar: {fileID: 79962677}
   IsHoldingBreath: 0
+  UsedSpecialAbility: 0
   IsRunning: 0
   CanRun: 1
   IsCollecting: 0
+  CanUseAbility: 0
   yOffSet: 40
 --- !u!114 &1786277076
 MonoBehaviour:
@@ -2213,10 +2236,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseSize: 1
+  AtHoldBreathSize: 0.5
   flickerAmount: 0.05
-  flickerSpeed: 1.5
+  normalFlickerSpeed: 2
+  holdBreathFlickerSpeed: 0.5
   minAlpha: 0
   maxAlpha: 0.1
+  normalColor: {r: 1, g: 0.84705883, b: 1, a: 0.07450981}
+  holdBreathColor: {r: 0, g: 0, b: 0, a: 1}
+  smoothSpeed: 2
+  colorSmoothSpeed: 3
+  targetSize: 0
 --- !u!1 &2080532787
 GameObject:
   m_ObjectHideFlags: 0

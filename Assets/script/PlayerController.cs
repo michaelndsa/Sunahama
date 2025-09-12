@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -24,21 +23,35 @@ public class PlayerController : MonoBehaviour
 
     [Header("狀態")]
     public bool IsHoldingBreath = false;
+    public bool UsedSpecialAbility = false;
     public bool IsRunning = false;
     public bool CanRun = true;
     public bool IsCollecting = false;
+    public bool CanUseAbility = false;
 
     [Header("圖層調整")]
     [SerializeField]
     private float yOffSet = 0f;
 
     private SpriteRenderer spriteRenderer;
+    private MendamaCollectUI collectUI;
+    private MendamaSpawner spawner;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        collectUI = FindObjectOfType<MendamaCollectUI>();
+        spawner = FindObjectOfType<MendamaSpawner>();
         Stamina = maxStamina;
+    }
+
+    private void FixedUpdate()
+    {
+        HandleMovement();
+        HandleStamina();
+        UpdateUI();
+        UpdateSortingOrder();
     }
 
     // ========= 外部設定方法 =========
@@ -70,18 +83,35 @@ public class PlayerController : MonoBehaviour
             Debug.Log("玩家放棄蒐集");
         }
     }
-
-    // ========= Update =========
-    private void FixedUpdate()
+    public void UseHideAbility()
     {
-        HandleMovement();
-        HandleStamina();
-        UpdateUI();
-        UpdateSortingOrder();
-    }
+        if (!CanUseAbility)
+            { return; }
+        {
+            
+        }
+        if (collectUI.collectCount > 0 )
+        {
+            // 只打一槍 → 讓敵人讀到就會反應
+            UsedSpecialAbility = true;
 
+            collectUI.UpdateUsed();
+
+            spawner.SpawnSingleMendamaFromList();
+        }
+        else
+        {
+            return;
+        }
+    }
     private void HandleMovement()
     {
+        if (UsedSpecialAbility)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+     
         float currentSpeed = walkSpeed;
 
         if (IsHoldingBreath && Stamina > 0f)
@@ -97,7 +127,7 @@ public class PlayerController : MonoBehaviour
             currentSpeed = slowSpeed; // 氣量歸零只能慢走
         }
 
-        rb.velocity = moveInput * currentSpeed;
+            rb.velocity = moveInput * currentSpeed;
     }
 
     private void HandleStamina()

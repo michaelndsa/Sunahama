@@ -26,7 +26,15 @@ public class MazeRenderer : MonoBehaviour
 
     public bool mazeGenerated = false;
 
+    // === 成員變數化 ===
     private int[,] maze;
+    private List<Vector2Int> exitCandidates = new List<Vector2Int>();
+    private Vector2Int exitPos;
+    private Vector3Int exitWorldPos;
+    private int width;
+    private int height;
+    private int totalWeight;
+    private int randomValue;
 
     void Start()
     {
@@ -36,13 +44,11 @@ public class MazeRenderer : MonoBehaviour
             return;
         }
 
-        // 生成迷宮資料
         maze = generator.Generate();
+        width = maze.GetLength(0);
+        height = maze.GetLength(1);
 
-        // 畫迷宮
         DrawMaze();
-
-        // 生成出口
         GenerateExit();
 
         mazeGenerated = true;
@@ -53,16 +59,12 @@ public class MazeRenderer : MonoBehaviour
 
     public void RegenerateMaze()
     {
-        // 重新生成迷宮資料
         maze = generator.Generate();
+        width = maze.GetLength(0);
+        height = maze.GetLength(1);
 
-        // 清空 Tilemap
         Tilemap.ClearAllTiles();
-
-        // 重畫迷宮
         DrawMaze();
-
-        // 重新產生出口
         GenerateExit();
     }
 
@@ -70,12 +72,11 @@ public class MazeRenderer : MonoBehaviour
     {
         Tilemap.ClearAllTiles();
 
-        for (int x = 0; x < maze.GetLength(0); x++)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < maze.GetLength(1); y++)
+            for (int y = 0; y < height; y++)
             {
                 Vector3Int pos = new Vector3Int(x, y, 0);
-
                 if (maze[x, y] == 1)
                     Tilemap.SetTile(pos, GetRandomTile(WallTiles, WallWeights));
                 else
@@ -86,66 +87,60 @@ public class MazeRenderer : MonoBehaviour
 
     void GenerateExit()
     {
-        List<Vector2Int> candidates = new List<Vector2Int>();
-
-        int width = maze.GetLength(0);
-        int height = maze.GetLength(1);
+        exitCandidates.Clear();
 
         // 上下邊界
         for (int x = 1; x < width - 1; x += 2)
         {
-            if (maze[x, 1] == 0) candidates.Add(new Vector2Int(x, 0));
-            if (maze[x, height - 2] == 0) candidates.Add(new Vector2Int(x, height - 1));
+            if (maze[x, 1] == 0) exitCandidates.Add(new Vector2Int(x, 0));
+            if (maze[x, height - 2] == 0) exitCandidates.Add(new Vector2Int(x, height - 1));
         }
 
         // 左右邊界
         for (int y = 1; y < height - 1; y += 2)
         {
-            if (maze[1, y] == 0) candidates.Add(new Vector2Int(0, y));
-            if (maze[width - 2, y] == 0) candidates.Add(new Vector2Int(width - 1, y));
+            if (maze[1, y] == 0) exitCandidates.Add(new Vector2Int(0, y));
+            if (maze[width - 2, y] == 0) exitCandidates.Add(new Vector2Int(width - 1, y));
         }
 
-        if (candidates.Count == 0) return;
+        if (exitCandidates.Count == 0) return;
 
-        int index = Random.Range(0, candidates.Count);
-        Vector2Int exitPos = candidates[index];
+        randomValue = Random.Range(0, exitCandidates.Count);
+        exitPos = exitCandidates[randomValue];
         maze[exitPos.x, exitPos.y] = 0;
 
-        Vector3Int pos = new Vector3Int(exitPos.x, exitPos.y, 0);
+        exitWorldPos = new Vector3Int(exitPos.x, exitPos.y, 0);
         if (ExitTile != null)
-            Tilemap.SetTile(pos, ExitTile);
+            Tilemap.SetTile(exitWorldPos, ExitTile);
         else
-            Tilemap.SetTile(pos, GetRandomTile(FloorTiles, FloorWeights));
+            Tilemap.SetTile(exitWorldPos, GetRandomTile(FloorTiles, FloorWeights));
     }
 
     public void OpenExit()
     {
-        int width = maze.GetLength(0);
-        int height = maze.GetLength(1);
-
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 if (Tilemap.GetTile(new Vector3Int(x, y, 0)) == ExitTile)
                 {
-                    // 換成沒有碰撞的地板 tile
                     Tilemap.SetTile(new Vector3Int(x, y, 0), GetRandomTile(FloorTiles, FloorWeights));
                     return;
                 }
             }
         }
     }
+
     Tile GetRandomTile(Tile[] tiles, int[] weights)
     {
         if (tiles == null || tiles.Length == 0 || weights == null || tiles.Length != weights.Length)
             return null;
 
-        int totalWeight = 0;
+        totalWeight = 0;
         for (int i = 0; i < weights.Length; i++)
             totalWeight += weights[i];
 
-        int randomValue = Random.Range(0, totalWeight);
+        randomValue = Random.Range(0, totalWeight);
 
         for (int i = 0; i < tiles.Length; i++)
         {
@@ -160,5 +155,11 @@ public class MazeRenderer : MonoBehaviour
     public int[,] GetMaze()
     {
         return maze;
+    }
+
+    // 額外提供出口位置 (方便其他系統排除)
+    public Vector2Int GetExitPosition()
+    {
+        return exitPos;
     }
 }
